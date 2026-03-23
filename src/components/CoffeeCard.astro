@@ -1,0 +1,215 @@
+---
+import RatingBadge from './RatingBadge.astro'
+import type { CoffeeShop } from '../lib/sanity'
+import { formatDate } from '../lib/sanity'
+
+export interface Props {
+  shop: CoffeeShop
+  featured?: boolean
+}
+
+const { shop, featured = false } = Astro.props
+---
+
+<article class:list={['coffee-card', { 'coffee-card--featured': featured }]}>
+  <a href={`/coffee/${shop.slug.current}`} class="card-link">
+    <div class="card-image-wrap">
+      {shop.mainImage ? (
+        <img
+          src={shop.mainImage}
+          alt={shop.mainImageAlt || shop.title}
+          loading="lazy"
+          class="card-image"
+        />
+      ) : (
+        <div class="card-image-placeholder">
+          <span>☕</span>
+        </div>
+      )}
+      {shop.rating && (
+        <div class="card-rating">
+          <RatingBadge rating={shop.rating} size="sm" />
+        </div>
+      )}
+    </div>
+
+    <div class="card-body">
+      <div class="card-meta">
+        {shop.neighborhood && <span class="meta-neighborhood">{shop.neighborhood}</span>}
+        {shop.priceRange   && <span class="meta-price">{shop.priceRange}</span>}
+      </div>
+
+      <h3 class="card-title">{shop.title}</h3>
+
+      {shop.summary && <p class="card-summary">{shop.summary}</p>}
+
+      {shop.tags && shop.tags.length > 0 && (
+        <ul class="card-tags">
+          {shop.tags.slice(0, 3).map((tag: string) => (
+            <li class="tag">{tag}</li>
+          ))}
+        </ul>
+      )}
+
+      <div class="card-footer">
+        {shop.publishedAt && (
+          <time datetime={shop.publishedAt} class="card-date">
+            {formatDate(shop.publishedAt)}
+          </time>
+        )}
+        <span class="card-cta">Read review →</span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .coffee-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .coffee-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(44, 24, 16, 0.12);
+  }
+
+  .card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+  }
+
+  /* Image */
+  .card-image-wrap {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background: var(--milk);
+  }
+
+  .coffee-card--featured .card-image-wrap {
+    aspect-ratio: 16/8;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .coffee-card:hover .card-image { transform: scale(1.03); }
+
+  .card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: var(--milk);
+  }
+
+  .card-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  /* Body */
+  .card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .coffee-card--featured .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .meta-neighborhood {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--caramel);
+  }
+
+  .meta-price {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-weight: 600;
+    color: var(--espresso);
+    line-height: 1.25;
+  }
+
+  .coffee-card--featured .card-title {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+  }
+
+  .card-summary {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--milk);
+    color: var(--muted);
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-date {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .card-cta {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--caramel);
+    letter-spacing: 0.02em;
+  }
+</style>

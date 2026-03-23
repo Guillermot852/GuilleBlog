@@ -1,0 +1,80 @@
+---
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">Crema</span>
+      <p class="footer-tagline">Madrid through a coffee cup.</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <ul>
+        <li><a href="/coffee">Coffee</a></li>
+        <li><a href="/style">Style</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>&copy; {year} Crema &mdash; Guillermo Trigo &mdash; Madrid</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--espresso);
+    color: var(--milk);
+    margin-top: 4rem;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-tagline {
+    font-size: 0.875rem;
+    color: var(--muted);
+    color: #9E8E7E;
+  }
+
+  .footer-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-nav a {
+    font-size: 0.875rem;
+    color: #B0A090;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-nav a:hover { color: var(--cream); }
+
+  .footer-bottom {
+    border-top: 1px solid #3D2820;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    font-size: 0.8rem;
+    color: #7A6A5A;
+  }
+</style>

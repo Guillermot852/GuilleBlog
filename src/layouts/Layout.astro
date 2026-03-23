@@ -1,0 +1,156 @@
+---
+export interface Props {
+  title: string
+  description?: string
+  image?: string
+}
+
+const {
+  title,
+  description = 'Crema — Madrid through a coffee cup. Reviews, neighbourhood guides, and coffee culture from Madrid.',
+  image = '/og-default.jpg',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title}</title>
+
+    <style is:global>
+      /* ── CSS Custom Properties ─────────────────────────────── */
+      :root {
+        --cream:    #FAF7F2;
+        --espresso: #2C1810;
+        --caramel:  #C8860A;
+        --milk:     #F0E6D3;
+        --dark:     #1A1A1A;
+        --muted:    #7A6A5A;
+        --border:   #E8DDD0;
+        --white:    #FFFFFF;
+
+        --font-heading: 'Playfair Display', Georgia, serif;
+        --font-body:    'Inter', system-ui, sans-serif;
+
+        --max-width: 1100px;
+        --gap:       clamp(1rem, 4vw, 2rem);
+      }
+
+      /* ── Reset ─────────────────────────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: var(--font-body);
+        background-color: var(--cream);
+        color: var(--espresso);
+        line-height: 1.7;
+        font-size: 1rem;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Typography ────────────────────────────────────────── */
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-heading);
+        line-height: 1.2;
+        color: var(--espresso);
+      }
+
+      a {
+        color: var(--caramel);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      a:hover { color: var(--espresso); }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* ── Layout helpers ────────────────────────────────────── */
+      .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 var(--gap);
+      }
+
+      .section {
+        padding: clamp(2rem, 6vw, 4rem) 0;
+      }
+
+      /* ── Rich text (portable text output) ──────────────────── */
+      .prose h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 1rem; }
+      .prose h2 { font-size: clamp(1.3rem, 2.5vw, 1.7rem); margin: 2rem 0 0.75rem; }
+      .prose h3 { font-size: clamp(1.1rem, 2vw, 1.35rem); margin: 1.5rem 0 0.5rem; }
+      .prose p  { margin-bottom: 1.25rem; color: var(--dark); }
+      .prose blockquote {
+        border-left: 3px solid var(--caramel);
+        padding: 0.5rem 1.25rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+        color: var(--muted);
+        background: var(--milk);
+        border-radius: 0 6px 6px 0;
+      }
+      .prose strong { font-weight: 600; color: var(--espresso); }
+      .prose em     { font-style: italic; }
+      .prose code   {
+        font-family: monospace;
+        background: var(--milk);
+        padding: 0.1em 0.4em;
+        border-radius: 4px;
+        font-size: 0.875em;
+      }
+
+      /* ── Utilities ──────────────────────────────────────────── */
+      .sr-only {
+        position: absolute; width: 1px; height: 1px;
+        padding: 0; margin: -1px; overflow: hidden;
+        clip: rect(0,0,0,0); border: 0;
+      }
+
+      /* ── Animations ─────────────────────────────────────────── */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .fade-up { animation: fadeUp 0.5s ease forwards; }
+    </style>
+  </head>
+
+  <body>
+    <slot name="header" />
+    <main>
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

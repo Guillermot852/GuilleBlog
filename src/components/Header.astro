@@ -1,0 +1,169 @@
+---
+const navLinks = [
+  { href: '/coffee', label: 'Coffee' },
+  { href: '/style',  label: 'Style'  },
+  { href: '/about',  label: 'About'  },
+]
+
+const pathname = Astro.url.pathname
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo" aria-label="Crema — home">
+      <span class="logo-word">Crema</span>
+      <span class="logo-tagline">Madrid</span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class:list={['nav-link', { active: pathname.startsWith(href) }]}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 1.5rem;
+  }
+
+  /* Logo */
+  .logo {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    line-height: 1;
+    color: var(--espresso) !important;
+  }
+  .logo-word {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .logo-tagline {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--caramel);
+  }
+
+  /* Nav */
+  .nav-list {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+    position: relative;
+    padding-bottom: 2px;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--caramel);
+    transition: width 0.2s;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--espresso);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  /* Hamburger (mobile) */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--espresso);
+    transition: transform 0.2s;
+  }
+
+  @media (max-width: 600px) {
+    .nav-toggle { display: flex; }
+
+    nav {
+      display: none;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem var(--gap);
+    }
+
+    nav.open { display: block; }
+
+    .nav-list {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle') as HTMLButtonElement
+  const nav    = document.querySelector('header nav') as HTMLElement
+
+  toggle?.addEventListener('click', () => {
+    const open = nav.classList.toggle('open')
+    toggle.setAttribute('aria-expanded', String(open))
+  })
+</script>

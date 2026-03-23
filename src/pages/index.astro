@@ -1,0 +1,262 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import CoffeeCard from '../components/CoffeeCard.astro'
+import { client, coffeeShopsQuery, stylePostsQuery, type CoffeeShop, type StylePost, formatDate } from '../lib/sanity'
+
+const coffeeShops: CoffeeShop[] = await client.fetch(coffeeShopsQuery)
+const stylePosts: StylePost[]   = await client.fetch(stylePostsQuery)
+
+const featured = coffeeShops[0]
+const recentCoffee = coffeeShops.slice(1, 7)
+const latestStyle  = stylePosts[0]
+---
+
+<Layout title="Crema — Madrid through a coffee cup">
+  <Header slot="header" />
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text fade-up">
+        <h1 class="hero-wordmark">Crema</h1>
+        <p class="hero-tagline">Madrid through a coffee cup</p>
+        <p class="hero-desc">
+          Honest coffee reviews, neighbourhood guides, and the good life in Madrid.
+          One espresso at a time.
+        </p>
+        <a href="/coffee" class="btn-primary">Explore reviews</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Review -->
+  {featured && (
+    <section class="section featured-section">
+      <div class="container">
+        <div class="section-label">Latest review</div>
+        <CoffeeCard shop={featured} featured={true} />
+      </div>
+    </section>
+  )}
+
+  <!-- Recent Coffee Reviews grid -->
+  {recentCoffee.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">More coffee</h2>
+          <a href="/coffee" class="section-link">All reviews →</a>
+        </div>
+
+        <div class="grid grid-3">
+          {recentCoffee.map((shop: CoffeeShop) => (
+            <CoffeeCard shop={shop} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Latest Style -->
+  {latestStyle && (
+    <section class="section style-preview">
+      <div class="container">
+        <div class="section-label">From the style section</div>
+        <a href={`/style/${latestStyle.slug.current}`} class="style-card">
+          {latestStyle.mainImage && (
+            <div class="style-image-wrap">
+              <img src={latestStyle.mainImage} alt={latestStyle.mainImageAlt || latestStyle.title} />
+            </div>
+          )}
+          <div class="style-body">
+            <h3 class="style-title">{latestStyle.title}</h3>
+            {latestStyle.summary && <p class="style-summary">{latestStyle.summary}</p>}
+            {latestStyle.publishedAt && (
+              <time datetime={latestStyle.publishedAt}>{formatDate(latestStyle.publishedAt)}</time>
+            )}
+          </div>
+        </a>
+      </div>
+    </section>
+  )}
+
+  <!-- Empty state -->
+  {coffeeShops.length === 0 && (
+    <section class="section">
+      <div class="container empty-state">
+        <span class="empty-icon">☕</span>
+        <h2>Reviews brewing…</h2>
+        <p>The first post is on its way. Check back soon.</p>
+        <a href="/about" class="btn-primary">About Crema</a>
+      </div>
+    </section>
+  )}
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--milk) 0%, var(--cream) 60%);
+    border-bottom: 1px solid var(--border);
+    padding: clamp(3rem, 10vw, 7rem) 0;
+    text-align: center;
+  }
+
+  .hero-inner { max-width: 680px; margin: 0 auto; }
+
+  .hero-wordmark {
+    font-family: var(--font-heading);
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 700;
+    color: var(--espresso);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.25rem;
+  }
+
+  .hero-tagline {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--caramel);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-desc {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--muted);
+    max-width: 460px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--espresso);
+    color: var(--cream) !important;
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--caramel);
+    transform: translateY(-1px);
+  }
+
+  /* Section decorators */
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--caramel);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .section-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--caramel);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .grid-3 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+  /* Style preview card */
+  .style-preview { background: var(--milk); }
+
+  .style-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    color: inherit;
+    transition: box-shadow 0.2s;
+  }
+
+  .style-card:hover { box-shadow: 0 8px 32px rgba(44,24,16,0.1); }
+
+  .style-image-wrap {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+
+  .style-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+
+  .style-card:hover img { transform: scale(1.04); }
+
+  .style-body {
+    padding: 2rem 2rem 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .style-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--espresso);
+  }
+
+  .style-summary {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .style-body time {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .empty-icon { font-size: 4rem; }
+
+  @media (max-width: 640px) {
+    .style-card { grid-template-columns: 1fr; }
+    .style-body { padding: 1.25rem; }
+  }
+</style>

@@ -1,0 +1,172 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<Layout
+  title="About — Crema"
+  description="Crema is a Madrid coffee & lifestyle blog by Guillermo Trigo."
+>
+  <Header slot="header" />
+
+  <section class="about-hero">
+    <div class="container">
+      <div class="page-label">The blog</div>
+      <h1 class="page-title">About Crema</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-layout">
+
+      <div class="about-intro">
+        <div class="cup-illustration" aria-hidden="true">☕</div>
+      </div>
+
+      <div class="about-text prose">
+        <h2>Madrid through a coffee cup</h2>
+
+        <p>
+          Crema started as a personal spreadsheet of coffee shops I'd visited in Madrid — ratings,
+          notes, vibes. At some point the spreadsheet felt insufficient. Good places deserve better
+          than a row in a table.
+        </p>
+
+        <p>
+          So here we are. Crema is an honest record of Madrid's coffee scene: the specialty roasters
+          changing the city's palate, the old-school bares where a cortado costs €1.20 and comes
+          with a pastry, and everything in between.
+        </p>
+
+        <p>
+          The rating is out of 10 and it means something. A 7 is good. A 9 is exceptional.
+          I don't inflate scores out of politeness.
+        </p>
+
+        <h2>About me</h2>
+
+        <p>
+          I'm <strong>Guillermo Trigo</strong>, a software engineer based in Madrid.
+          I drink too much coffee and walk too many kilometres between café visits.
+          I have opinions about espresso extraction ratios and I'm not sorry about that.
+        </p>
+
+        <p>
+          The Style section is where I write about everything else Madrid offers —
+          culture, architecture, neighbourhoods, the stuff you notice when you spend
+          hours sitting in coffee shops looking out the window.
+        </p>
+
+        <h2>What the ratings mean</h2>
+
+        <div class="rating-guide">
+          <div class="rating-row"><span class="r-score r-9">9–10</span><span>Exceptional. Go out of your way.</span></div>
+          <div class="rating-row"><span class="r-score r-7">7–8</span><span>Good. Worth a detour.</span></div>
+          <div class="rating-row"><span class="r-score r-5">5–6</span><span>Fine. Nothing special.</span></div>
+          <div class="rating-row"><span class="r-score r-3">1–4</span><span>Disappointing. Skip it.</span></div>
+        </div>
+
+        <p>
+          I pay for everything myself. No sponsored visits, no affiliate links.
+          Just honest opinions and too much caffeine.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  .about-hero {
+    background: var(--milk);
+    border-bottom: 1px solid var(--border);
+    padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .page-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--caramel);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-family: var(--font-heading);
+    color: var(--espresso);
+  }
+
+  .about-layout {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-intro {
+    position: sticky;
+    top: 80px;
+    text-align: center;
+  }
+
+  .cup-illustration {
+    font-size: 6rem;
+    display: block;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(44,24,16,0.15));
+  }
+
+  .about-text {
+    max-width: 620px;
+  }
+
+  /* Rating guide */
+  .rating-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: var(--milk);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .r-score {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 6px;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .r-9 { background: #E8F5E9; color: #1A5C2A; border: 1px solid #A5D6A7; }
+  .r-7 { background: #FFF8E1; color: #C8860A; border: 1px solid #FFE082; }
+  .r-5 { background: #FFF3E0; color: #9A6B00; border: 1px solid #FFCC80; }
+  .r-3 { background: #FDECEA; color: #8B2020; border: 1px solid #EF9A9A; }
+
+  @media (max-width: 640px) {
+    .about-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .about-intro {
+      position: static;
+      text-align: left;
+    }
+
+    .cup-illustration { font-size: 4rem; }
+  }
+</style>
